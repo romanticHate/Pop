@@ -35,17 +35,21 @@ namespace EvilCorp.Pop.Application.Identity.Handlers
             var result = new OperationResult<string>();
             try
             {
-                var existingIdentity = _userManager.FindByEmailAsync(request.Username);
-                if (existingIdentity != null)
-                {
-                    result.IsError = true;
-                    var error = new Error
-                    {
-                        Code = ErrorCode.IdentityUserAlreadyExists,
-                        Message = $"Provided email-address already exists. Cannot register new User"
-                    };
-                    result.Errors.Add(error);
-                }
+                #region Code Review
+
+                //var existingIdentity = _userManager.FindByEmailAsync(request.Username);
+                //if (existingIdentity != null)
+                //{
+                //    result.IsError = true;
+                //    var error = new Error
+                //    {
+                //        Code = ErrorCode.IdentityUserAlreadyExists,
+                //        Message = $"Provided email-address already exists. Cannot register new User"
+                //    };
+                //    result.Errors.Add(error);
+                //}
+                #endregion
+
                 var identity = new IdentityUser
                 {
                     Email=request.EmailAddress,
