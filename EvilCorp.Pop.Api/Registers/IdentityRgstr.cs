@@ -1,6 +1,5 @@
 ﻿using EvilCorp.Pop.Application.Options;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

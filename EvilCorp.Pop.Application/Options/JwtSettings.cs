@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EvilCorp.Pop.Application.Options
+﻿namespace EvilCorp.Pop.Application.Options
 {
     public class JwtSettings
     {

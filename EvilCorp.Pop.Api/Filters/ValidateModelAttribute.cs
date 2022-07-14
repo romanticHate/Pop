@@ -13,7 +13,7 @@ namespace EvilCorp.Pop.Api.Filters
                 var apiError = new ErrorResponse 
                 {
                     StatusCode = 400,
-                    StatusPhrase = "Bad request",
+                    StatusPhrase = "Bad Request",
                     TimeStamp = DateTime.UtcNow
                 };              
 

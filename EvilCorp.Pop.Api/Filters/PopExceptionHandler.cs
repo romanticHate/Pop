@@ -11,14 +11,14 @@ namespace EvilCorp.Pop.Api.Filters
         {
             var apiError = new ErrorResponse
             {
-                StatusCode = (int)ErrorCode.ServerError,
+                StatusCode = 500,
                 StatusPhrase = "Internal Server Error",
                 TimeStamp = DateTime.UtcNow
             };           
 
             apiError.Errors.Add(context.Exception.Message);
 
-            context.Result = new JsonResult(apiError) { StatusCode = (int)ErrorCode.ServerError };
+            context.Result = new JsonResult(apiError) { StatusCode = 500 };
         }
     }
 }

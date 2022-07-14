@@ -1,5 +1,4 @@
 ﻿using EvilCorp.Pop.Api.Contracts.Common;
-using EvilCorp.Pop.Application.Enum;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
@@ -18,7 +17,7 @@ namespace EvilCorp.Pop.Api.Filters
             if (Guid.TryParse(value?.ToString(), out var guid)) return;
             var apiError = new ErrorResponse
             {
-                StatusCode = (int)ErrorCode.BadRequest,
+                StatusCode = 400,
                 StatusPhrase = "Bad Request",
                 TimeStamp = DateTime.UtcNow
             };

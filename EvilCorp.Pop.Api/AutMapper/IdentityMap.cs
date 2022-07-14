@@ -9,6 +9,7 @@ namespace EvilCorp.Pop.Api.AutMapper
         public IdentityMap()
         {
             CreateMap<UserRegistration, RegisterIdentity>();
+            CreateMap<Login, LoginCmd>();
         }
     }
 }

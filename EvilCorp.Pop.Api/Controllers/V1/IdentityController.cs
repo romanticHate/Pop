@@ -33,8 +33,24 @@ namespace EvilCorp.Pop.Api.Controllers.V1
             var response = await _mediator.Send(command);
             if (response.IsError) return HandleErrorResponse(response.Errors);
 
-            var authRslt = new AuthenticationResult() { Token = response.Payload };
-            return Ok(authRslt);
-        }        
+            var authenticationRslt = new AuthenticationResult() { Token = response.Payload };
+            return Ok(authenticationRslt);
+        }
+
+        [HttpPost]
+        [Route(ApiRoute.Identity.LogIn)]
+        [ValidateModel]
+        public async Task<IActionResult> LogIn([FromBody] Login login)
+        {
+            // TO DO: Code code code
+            var command = _mapper.Map<LoginCmd>(login);
+
+            var response = await _mediator.Send(command);
+            if (response.IsError) return HandleErrorResponse(response.Errors);
+
+            var authenticationRslt = new AuthenticationResult() { Token = response.Payload };
+
+            return Ok(authenticationRslt);
+        }
     }
 }
