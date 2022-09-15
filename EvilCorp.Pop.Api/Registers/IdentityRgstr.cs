@@ -37,8 +37,7 @@ namespace EvilCorp.Pop.Api.Registers
                 };
                 jwt.Audience = jwtSettings.Audiences[0];
                 jwt.ClaimsIssuer = jwtSettings.Issuer;
-            });
-            
+            });            
         }
     }
 }

@@ -14,7 +14,7 @@ namespace EvilCorp.Pop.Api.Controllers.V1
     [ApiVersion("1.0")]
     [Route(ApiRoute.BaseRoute)]
     [ApiController]
-    [Authorize(/*AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme*/)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserProfileController : BaseController
     {
         private readonly IMapper _mapper;
@@ -54,8 +54,7 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         }
 
         // POST api/<UserProfileController>
-        [HttpPost]
-      
+        [HttpPost]      
         public async Task<IActionResult> Create([FromBody] UserProfileRqst userProfile)
         {
             var command = _mapper.Map<CreateUserProfileCmd>(userProfile);

@@ -7,7 +7,10 @@ using EvilCorp.Pop.Application.Post.Commands;
 using EvilCorp.Pop.Application.Post.Querys;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Security.Claims;
+using EvilCorp.Pop.Api.Extensions;
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace EvilCorp.Pop.Api.Controllers.V1
@@ -15,11 +18,11 @@ namespace EvilCorp.Pop.Api.Controllers.V1
     [ApiVersion("1.0")]
     [Route(ApiRoute.BaseRoute)]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PostController : BaseController
     {
         private readonly IMapper _mapper;
         private readonly IMediator _mediator;
-
         public PostController(IMapper mapper, IMediator mediator)
         {
             _mediator = mediator;
@@ -29,10 +32,10 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         // GET: api/<PostController>
         [HttpGet]
         public async Task<IActionResult> GetAll()
-        {
-            var response = await _mediator.Send(new GetAllPostQry());
-            var postLst = _mapper.Map<List<PostRspn>>(response.Payload);
-            return response.IsError ? HandleErrorResponse(response.Errors) : Ok(postLst);
+        {           
+           var response = await _mediator.Send(new GetAllPostQry());
+           var postLst = _mapper.Map<List<PostRspn>>(response.Payload);
+           return response.IsError ? HandleErrorResponse(response.Errors) : Ok(postLst);
         }
 
         // GET api/<PostController>/5
@@ -48,14 +51,22 @@ namespace EvilCorp.Pop.Api.Controllers.V1
 
         // POST api/<UserProfileController>
         [HttpPost]
-        //[ValidateModel]
-        public async Task<IActionResult> Create([FromBody] PostRqst post)
+        [ValidateModel]
+        public async Task<IActionResult> Create([FromBody] PostRqst postRqst)
         {
-            var command = _mapper.Map<CreatePostCmd>(post);
+            // var identity = HttpContext.User.Identity as ClaimsIdentity;
+            // var userProfileId = identity?.FindFirst("UserProfileId")?.Value;
+            var command = new CreatePostCmd
+            {
+                UserProfileId = HttpContext.GetUserProfileIdClaim(),
+                TextContent = postRqst.TextContent
+            };
+
+            //var command = _mapper.Map<CreatePostCmd>(postRqst);
             var response = await _mediator.Send(command);
             if (response.IsError) { return HandleErrorResponse(response.Errors); }
-            var postObj = _mapper.Map<PostRspn>(response.Payload);
-            return CreatedAtAction(nameof(GetById), new { id = postObj.PostId }, postObj);            
+            var postRspn = _mapper.Map<PostRspn>(response.Payload);
+            return CreatedAtAction(nameof(GetById), new { id = postRspn.PostId }, postRspn);            
         }
 
         // PUT api/<UserProfileController>/5
@@ -63,14 +74,14 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         [HttpPut]
         [ValidateModel]// Action filter
         [ValidateGuid("id")]
-        public async Task<IActionResult> Put(string id, [FromBody] PostRqst post)
+        public async Task<IActionResult> Put(string id, [FromBody] PostRqst postRqst)
         {
             var command = new UpdatePostTextCmd { PostId= Guid.Parse(id),
-                                                  Text = post.TextContent };        
+                                                  Text = postRqst.TextContent };        
             var response = await _mediator.Send(command);
-            var postObj = _mapper.Map<PostRspn>(response.Payload);            
+            var postRspn = _mapper.Map<PostRspn>(response.Payload);            
             return response.IsError ? HandleErrorResponse(response.Errors) : CreatedAtAction(nameof(GetById),
-                  new { id = postObj.PostId }, postObj);
+                  new { id = postRspn.PostId }, postRspn);
         }
 
         // DELETE api/<UserProfileController>/5
@@ -101,7 +112,6 @@ namespace EvilCorp.Pop.Api.Controllers.V1
 
                 return BadRequest(apiError);
             }
-
             var command = new AddCommentCmd()
             {
                 PostId = Guid.Parse(postId),

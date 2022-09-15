@@ -48,7 +48,7 @@ namespace EvilCorp.Pop.Api.Options
             return new OpenApiSecurityScheme
             {
                 Name = "JWT Authentication",
-                Description = "Provide jwt Bearer",
+                Description = "Provide JWT bearer",
                 In = ParameterLocation.Header,
                 Type = SecuritySchemeType.Http,
                 Scheme = "bearer",

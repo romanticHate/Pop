@@ -25,7 +25,6 @@ namespace EvilCorp.Pop.Api.Controllers.V1
 
                 return NotFound(apiError);
             }
-
             apiError.StatusCode = 500;
             apiError.StatusPhrase = "Internal server error";
             apiError.TimeStamp = DateTime.UtcNow;
@@ -38,7 +37,6 @@ namespace EvilCorp.Pop.Api.Controllers.V1
             //    var error = errors.FirstOrDefault(e => e.Code == Application.Enum.ErrorCode.NotFound);
             //    return StatusCode(500, error.Message);
             //}
-
             //return BadRequest(errors);
         }        
     }

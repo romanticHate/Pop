@@ -22,7 +22,6 @@ namespace EvilCorp.Pop.Application.Services
             var tokenDescriptor = GetTokenDescriptor(identity);
             return tokenHandler.CreateToken(tokenDescriptor);           
         }
-
         public string WriteToken(SecurityToken token)
         {
             return tokenHandler.WriteToken(token);
@@ -32,7 +31,7 @@ namespace EvilCorp.Pop.Application.Services
             return new SecurityTokenDescriptor()
             {
                 Subject = identity,
-                Expires = DateTime.Now.AddHours(2),
+                Expires = DateTime.UtcNow.AddHours(2),
                 Audience = _jwtSettings.Audiences[0],
                 Issuer = _jwtSettings.Issuer,
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(_key),
