@@ -61,7 +61,6 @@ namespace EvilCorp.Pop.Api.Controllers.V1
                 UserProfileId = HttpContext.GetUserProfileIdClaim(),
                 TextContent = postRqst.TextContent
             };
-
             //var command = _mapper.Map<CreatePostCmd>(postRqst);
             var response = await _mediator.Send(command);
             if (response.IsError) { return HandleErrorResponse(response.Errors); }
@@ -76,9 +75,14 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         [ValidateGuid("id")]
         public async Task<IActionResult> Put(string id, [FromBody] PostRqst postRqst)
         {
-            var command = new UpdatePostTextCmd { PostId= Guid.Parse(id),
-                                                  Text = postRqst.TextContent };        
-            var response = await _mediator.Send(command);
+            var command = new UpdatePostTextCmd
+            {
+                PostId = Guid.Parse(id),
+                Text = postRqst.TextContent,
+                UserProfileId = HttpContext.GetUserProfileIdClaim()
+            };
+
+            var response = await _mediator.Send(command);            
             var postRspn = _mapper.Map<PostRspn>(response.Payload);            
             return response.IsError ? HandleErrorResponse(response.Errors) : CreatedAtAction(nameof(GetById),
                   new { id = postRspn.PostId }, postRspn);
@@ -90,7 +94,12 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         [ValidateGuid("id")]// Action filter
         public async Task<IActionResult> Delete(string id)
         {
-            var command = new DeletePostCmd() { PostId = Guid.Parse(id) };
+            var command = new DeletePostCmd() 
+            { 
+                PostId = Guid.Parse(id), 
+                UserProfileId = HttpContext.GetUserProfileIdClaim() 
+            };
+
             var response = await _mediator.Send(command);
             var postObj = _mapper.Map<PostRspn>(response.Payload);
             return response.IsError ? HandleErrorResponse(response.Errors) : NoContent();
@@ -99,9 +108,9 @@ namespace EvilCorp.Pop.Api.Controllers.V1
         [Route(ApiRoute.Post.Comments)]
         [HttpPost]
         [ValidateGuid("postId")]// Action filter
-        public async Task<IActionResult> AddCommentToPost(string postId, [FromBody] CommentRqst comment)
+        public async Task<IActionResult> AddCommentToPost(string postId, [FromBody] CommentRqst commentRqst)
         {
-            var isValidGuid = Guid.TryParse(postId, out var userProfileId);
+            var isValidGuid = Guid.TryParse(commentRqst.UserProfileId, out var userProfileId);
             if (!isValidGuid)
             {
                 var apiError = new ErrorResponse();
@@ -115,12 +124,12 @@ namespace EvilCorp.Pop.Api.Controllers.V1
             var command = new AddCommentCmd()
             {
                 PostId = Guid.Parse(postId),
-                Text = comment.Text,
-                UserProfileId = Guid.Parse(comment.UserProfileId)
+                Text = commentRqst.Text,
+                UserProfileId = userProfileId
             };
             var response = await _mediator.Send(command);
-            var newComment = _mapper.Map<CommentRspn>(response.Payload);
-            return response.IsError ? HandleErrorResponse(response.Errors) : Ok(newComment);
+            var commentRspn = _mapper.Map<CommentRspn>(response.Payload);
+            return response.IsError ? HandleErrorResponse(response.Errors) : Ok(commentRspn);
         }
 
         [Route(ApiRoute.Post.Comments)]

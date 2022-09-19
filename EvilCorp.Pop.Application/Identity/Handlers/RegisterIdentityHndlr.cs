@@ -89,7 +89,7 @@ namespace EvilCorp.Pop.Application.Identity.Handlers
                 var error = new Error
                 {
                     Code = ErrorCode.IdentityUserAlreadyExists,
-                    Message = $"Provided UserName already exists. Cannot register new User"
+                    Message = $"Provided email address already exists. Cannot register new User"
                 };
                 result.Errors.Add(error);
                 return false; 

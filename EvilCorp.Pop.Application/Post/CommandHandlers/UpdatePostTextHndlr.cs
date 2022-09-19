@@ -33,6 +33,17 @@ namespace EvilCorp.Pop.Application.Post.CommandHandlers
                     };
                     result.Errors.Add(error);
                 }
+
+                else if (post.UserProfileId != request.UserProfileId)
+                {
+                    result.IsError = true;
+                    var error = new Error
+                    {
+                        Code = ErrorCode.PostUpdateNotPossible,
+                        Message = $"Update post is not posible, You are not the post owner"
+                    };
+                    result.Errors.Add(error);
+                }
                 post.UpdatePostText(request.Text);
                 await _ctx.SaveChangesAsync();
                 result.Payload = post;

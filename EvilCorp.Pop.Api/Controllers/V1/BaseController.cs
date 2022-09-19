@@ -25,12 +25,12 @@ namespace EvilCorp.Pop.Api.Controllers.V1
 
                 return NotFound(apiError);
             }
-            apiError.StatusCode = 500;
-            apiError.StatusPhrase = "Internal server error";
+            apiError.StatusCode = 400;
+            apiError.StatusPhrase = "Bad request";
             apiError.TimeStamp = DateTime.UtcNow;
-            apiError.Errors.Add("Unknown error");
+            errors.ForEach(e => apiError.Errors.Add(e.Message));
 
-            return StatusCode(500,apiError);
+            return StatusCode(400,apiError);
 
             //if (errors.Any(e => e.Code == Application.Enum.ErrorCode.ServerError))
             //{

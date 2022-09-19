@@ -37,24 +37,21 @@ namespace EvilCorp.Pop.Application.Post.CommandHandlers
                     result.Errors.Add(error);
                     return result;
                 }
+                else if (post.UserProfileId != request.UserProfileId)
+                {
+                    result.IsError = true;
+                    var error = new Error
+                    {
+                        Code = ErrorCode.PostDeleteNotPossible,
+                        Message = $"Only the OWNER of the POST can Delete this."
+                    };
+                    result.Errors.Add(error);
+                    return result;
+                }
                 _ctx.Posts.Remove(post);
                 await _ctx.SaveChangesAsync();
                 result.Payload = post;
-            }
-            //catch (PostNotValidException ex)
-            //{
-            //    result.IsError = true;
-            //    ex.Errors.ForEach(e =>
-            //    {
-            //        var error = new Error
-            //        {
-            //            Code = ErrorCode.ValidationError,
-            //            Message = $"{ex.Message}"
-            //        };
-
-            //        result.Errors.Add(error);
-            //    });
-            //}
+            }         
             catch (Exception e)
             {
                 var error = new Error

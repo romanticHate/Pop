@@ -6,8 +6,8 @@ namespace EvilCorp.Pop.Application.Post.Commands
     public class UpdatePostTextCmd:IRequest<OperationResult<Domain.Aggregates.Post.Post>>
     {
         public Guid PostId { get; set; }
-     
+        public Guid UserProfileId { get; set; }
         public string Text { get; set; }
-      
+       
     }
 }

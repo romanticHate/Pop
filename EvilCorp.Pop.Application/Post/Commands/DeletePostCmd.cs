@@ -6,5 +6,6 @@ namespace EvilCorp.Pop.Application.Post.Commands
     public class DeletePostCmd : IRequest<OperationResult<Domain.Aggregates.Post.Post>>
     {
         public Guid PostId { get; set; }
+        public Guid UserProfileId { get; set; }
     }
 }
