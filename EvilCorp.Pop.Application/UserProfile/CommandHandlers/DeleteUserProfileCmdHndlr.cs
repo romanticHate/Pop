@@ -31,7 +31,7 @@ namespace EvilCorp.Pop.Application.UserProfile.CommandHandlers
                     var error = new Error
                     {
                         Code = ErrorCode.NotFound,
-                        Message = $"No UserProfile found whit ID: {request.UserProfileId}"
+                        Message = ErrorMessage.ProfileNotFound // $"No UserProfile found whit ID: {request.UserProfileId}"
                     };
                     result.Errors.Add(error);
                     return result;

@@ -40,7 +40,7 @@ namespace EvilCorp.Pop.Application.Post.CommandHandlers
                     var error = new Error
                     {
                         Code = ErrorCode.PostUpdateNotPossible,
-                        Message = $"Update post is not posible, You are not the post owner"
+                        Message = $"Update post is not posible. You are not the post owner"
                     };
                     result.Errors.Add(error);
                 }

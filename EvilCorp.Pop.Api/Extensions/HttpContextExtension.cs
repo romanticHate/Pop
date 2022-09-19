@@ -19,7 +19,7 @@ namespace EvilCorp.Pop.Api.Extensions
         private static Guid GetGuidClaim(string key, HttpContext context)
         {
             var identity = context.User.Identity as ClaimsIdentity;
-            return Guid.Parse(identity?.FindFirst("IdentityId")?.Value);
+            return Guid.Parse(identity?.FindFirst(key)?.Value);
         }
     }
 }

@@ -68,7 +68,7 @@ namespace EvilCorp.Pop.Application.Identity.Handlers
                 var error = new Error
                 {
                     Code = ErrorCode.IdentityUserDoesNotExist,
-                    Message = $"Unable to find a user whit the specified username"
+                    Message = ErrorMessage.NonExistentIdentityUser
                 };
 
                 result.Errors.Add(error);
@@ -84,7 +84,7 @@ namespace EvilCorp.Pop.Application.Identity.Handlers
                 var error = new Error
                 {
                     Code = ErrorCode.ValidationError,
-                    Message = $"The provided password is incorrect"
+                    Message = ErrorMessage.IncorrectPassword
                 };
 
                 result.Errors.Add(error);

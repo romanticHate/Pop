@@ -9,7 +9,9 @@ namespace EvilCorp.Pop.Domain.Validators.Post
         {
             RuleFor(p => p.TextContent)
                   .NotNull().WithMessage("Comment text should not be null")
-                  .NotEmpty().WithMessage("Comment text should not be empty");
+                  .NotEmpty().WithMessage("Comment text should not be empty")
+                  .MaximumLength(1000)
+                  .MinimumLength(15);
         }
     }
 }

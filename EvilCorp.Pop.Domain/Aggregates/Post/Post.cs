@@ -42,15 +42,17 @@ namespace EvilCorp.Pop.Domain.Aggregates.Post
             };
             var result = validator.Validate(objToVldt);
 
-            if (result.IsValid) return objToVldt;
-
-            var exception = new PostNotValidException("Post is not valid");
-            result.Errors.ForEach(vr => exception.Errors.Add(vr.ErrorMessage));
-            //foreach (var error in vldtResult.Errors)
-            //{
-            //    exception.Errors.Add(error.ErrorMessage);
-            //}
-            throw exception;
+            if (!result.IsValid) {
+                var exception = new PostNotValidException("Post is not valid");
+                result.Errors.ForEach(vr => exception.Errors.Add(vr.ErrorMessage));
+                //foreach (var error in vldtResult.Errors)
+                //{
+                //    exception.Errors.Add(error.ErrorMessage);
+                //}
+                throw exception;
+            }
+            
+            return objToVldt;           
         }
 
         /// <summary>
